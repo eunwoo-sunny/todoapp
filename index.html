@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TEST DOCS - TODOLIST</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>TODO LIST APP</h1>
+      <!-- <input type="text" v-model="inputText" v-on:keyup="addItemJs" /> -->
+      <input type="text" v-model="inputText" v-on:keyup.enter="addItem" />
+      <button v-on:click="addItem">Add</button>
+      <ul>
+        <li v-for="(todoItem, index) in todoItems" :key="index">
+          {{ todoItem }}
+          <button v-on:click="removeItem(todoItem,index)">❌</button>
+        </li>
+      </ul>
+
+      JSON.parse() JSON.stringify()
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router@3.5.3/dist/vue-router.js"></script>
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          inputText: "Hello world",
+          todoItems: [],
+        },
+        created: function () {
+          // 인스턴스 생성되었을 때, 이 안에있는 것이 실행된다.
+          this.fetchItems();
+        },
+        methods: {
+          /*
+          addItemJs: function (event) {
+            if (event.keyCode === 13) {
+              console.log(event);
+              var value = this.inputText;
+              localStorage.setItem(value, value);
+              this.inputText = "";
+            }
+            // $.ajax({
+            //     type:'POST'
+            // })
+            // axios.post('addr', this.inputText)
+          }, */
+          removeItem: function (item, idx) {
+            console.log(item, idx);
+            this.todoItems.splice(idx, 1);
+            localStorage.removeItem(item);
+          },
+          addItem: function (event) {
+            // console.log(event);
+            if (this.inputText !== "") {
+              var value = this.inputText;
+              localStorage.setItem(value, value);
+              this.inputText = "";
+              this.todoItems.push(value);
+            }
+          },
+          fetchItems: function () {
+            // axios.get('/todos')
+            for (var i = 0; i < localStorage.length; i++) {
+              var value = localStorage.key(i);
+              this.todoItems.push(value);
+            }
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
